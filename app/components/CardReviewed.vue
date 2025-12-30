@@ -3,7 +3,7 @@
     <v-card elevation="0" v-for="card in reviewedCards" :key="card.title" rounded="xl"
       class="flex flex-col border border-[#E2E8F0] shadow-[#1717171A] gap-3">
       <v-card-subtitle :class="[
-        'rounded-full w-fit mt-3 ml-3 h-6 text-[11px] font-bold px-3 flex items-center justify-center border-none',
+        'rounded-full w-fit mt-3 ml-3 h-6 text-[11px] font-bold px-3 d-md-flex items-center justify-center border-none',
         getTagClass(card.tag)
       ]">
         {{ card.tag }}
@@ -12,13 +12,13 @@
       <v-card-text class="text-[#475569]">{{ card.description }}</v-card-text>
       <div class="flex justify-between items-center px-4 pb-4">
         <div class="flex flex-row-reverse justify-end italic">
-          <v-avatar v-for="(img, index) in card.avatars" :key="index" size="32"
-            class="border-2 border-white -ml-3 first:ml-0">
+          <v-avatar v-for="(img, index) in card.avatars" :key="index" size="32" class="ml-n3"
+            :style="{ zIndex: card.avatars.length - index }">
             <v-img :src="img" alt="Avatar" />
           </v-avatar>
 
           <v-avatar v-if="card.avatars.length > 4" size="32" color="#EEF2FF"
-            class="border-2 border-white -ml-3 text-[10px] font-bold text-[#4F46E5]">
+            class=" ml-n3 text-[10px] font-bold text-[#4F46E5]">
             +{{ card.avatars.length - 4 }}
           </v-avatar>
         </div>
@@ -60,6 +60,14 @@ const getTagClass = (tag: string) => {
       return 'bg-white text-[#475569] border-[#CBD5E1]';
   }
 };
+
 </script>
 
-<style></style>
+<style>
+  .v-avatar:nth-last-child(1) {
+  margin-left: 0 !important;
+}
+.v-avatar {
+  border: 2px solid white !important;
+}
+</style>

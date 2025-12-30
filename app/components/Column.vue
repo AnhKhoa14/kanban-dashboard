@@ -8,9 +8,9 @@
             flex justify-center w-10 h-8 text-[#4F46E5] font-semibold">25</span>
           <span class="items-center flex justify-center font-bold">In Progress</span>
         </div>
-        <span class="items-center flex justify-center cursor-pointer">
+        <button class="items-center flex justify-center cursor-pointer" @click="handleClick('In Progress')">
           <Plus class="w-6" />
-        </span>
+        </button>
       </div>
       <CardInProgress />
 
@@ -24,9 +24,9 @@
             flex justify-center w-10 h-8 text-[#F59E0B] font-semibold">8</span>
           <span class="items-center flex justify-center font-bold">Reviewed</span>
         </div>
-        <span class="items-center flex justify-center cursor-pointer">
+        <button class="items-center flex justify-center cursor-pointer" @click="handleClick('Reviewed')">
           <Plus class="w-6" />
-        </span>
+        </button>
       </div>
       <CardReviewed />
     </div>
@@ -39,20 +39,48 @@
             flex justify-center w-10 h-8 text-[#22C55E] font-semibold">2</span>
           <span class="items-center flex justify-center font-bold">Completed</span>
         </div>
-        <span class="items-center flex justify-center cursor-pointer">
+        <button class="items-center flex justify-center cursor-pointer" @click="handleClick('Completed')">
           <Plus class="w-6" />
-        </span>
+        </button>
       </div>
       <CardCompleted />
     </div>
+
+    <Dialog v-model="isDialogOpen" :status="currentStatus" @taskSaved="handleTaskSaved" />
   </div>
 </template>
 
 <script lang="ts" setup>
+import { ref } from 'vue';
 import { Plus } from 'lucide-vue-next';
 import CardInProgress from './CardInProgress.vue';
 import CardReviewed from './CardReviewed.vue';
 import CardCompleted from './CardCompleted.vue';
+import Dialog from './Dialog.vue';
+
+const isDialogOpen = ref(false);
+const currentStatus = ref('');
+const inProgressTasks = ref<any[]>([]);
+const reviewedTasks = ref<any[]>([]);
+const completedTasks = ref<any[]>([]);
+
+const handleClick = (status: string) => {
+  currentStatus.value = status;
+  if(!isDialogOpen.value) {
+    isDialogOpen.value = true;
+    return;
+  }
+}
+
+const handleTaskSaved = (task: any) => {
+  if (task.status === 'In Progress') {
+    inProgressTasks.value.push(task);
+  } else if (task.status === 'Reviewed') {
+    reviewedTasks.value.push(task);
+  } else if (task.status === 'Completed') {
+    completedTasks.value.push(task);
+  }
+}
 
 </script>
 
