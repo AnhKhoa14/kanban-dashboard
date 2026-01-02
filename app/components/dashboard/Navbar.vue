@@ -1,5 +1,5 @@
 <template>
-  <v-app-bar :elevation="0" class="p-8 pl-4 pr-8">
+  <v-app-bar :elevation="0" class="pl-4 pr-8 ">
     <v-app-bar-title>Kanban Dashboard 🃏</v-app-bar-title>
 
     <div class="ml-auto flex items-center gap-2">

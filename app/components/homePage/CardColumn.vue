@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { CircleCheck, MessageCircleMore, Plus } from 'lucide-vue-next'
-import avatar1 from './../assets/image/avatar-1.png'
+import avatar1 from './../../assets/image/avatar-1.png'
 import { VueDraggableNext as draggable } from 'vue-draggable-next'
 
 const props = defineProps<{
@@ -35,27 +35,29 @@ const tagColor = (tag: string) => {
 const handleDragStart = () => {
   document.body.classList.add('dragging')
 }
-
-const handleAdd = (evt: any) => {
-  const task = evt.item.__draggable_context.element
-
-  emit('column-drop', {
-    taskId: task.id,
-    toStatus: props.status
-  })
-}
-
 const handleDragEnd = () => {
   document.body.classList.remove('dragging')
 }
+const handleChange = (evt: any) => {
+  if (evt.added) {
+    const task = evt.added.element
+    emit('column-drop', {
+      taskId: task.id,
+      toStatus: props.status
+    })
+  }
+}
+
+
 </script>
 
 <template>
-  <div class="flex flex-col gap-4 w-[320px]">
+  <div class="flex flex-col gap-4 w-[320px] h-full py-8">
     <div class="flex justify-between text-white py-2 px-3 rounded-full h-12 sticky top-0 z-10"
       :style="{ backgroundColor: color }">
       <div class="flex items-center gap-3">
-        <span class="bg-white py-1.5 px-3 rounded-full text-lg flex justify-center w-10 h-8 text-black font-semibold">
+        <span
+          class="bg-white py-1.5 px-3 rounded-full text-lg flex items-center justify-center w-10 h-8 text-black font-semibold">
           {{ tasks.length || 0 }}
         </span>
         <span class="font-bold">{{ title }}</span>
@@ -68,12 +70,12 @@ const handleDragEnd = () => {
 
     <draggable :list="tasks" group="tasks" item-key="id" handle=".drag-handle" ghost-class="drag-ghost"
       chosen-class="drag-chosen" drag-class="drag-drag" :force-fallback="true" :fallback-on-body="true"
-      fallback-class="drag-fallback" animation="200" class="flex flex-col gap-4 min-h-20" @start="handleDragStart"
-      @add="handleAdd" @end="handleDragEnd">
+      fallback-class="drag-fallback" animation="200" class="flex flex-col gap-4 flex-1 min-h-0" @start="handleDragStart"
+      @end="handleDragEnd" @change="handleChange">
 
       <v-card v-for="task in tasks" :key="task.id || task.name" rounded="xl"
-        class="border border-[#E2E8F0] kanban-card">
-        <div class="drag-handle cursor-grab px-4 pt-4">
+        class="border border-[#E2E8F0] kanban-card cursor-pointer">
+        <div class="drag-handle px-4 pt-4">
           <v-card-subtitle :class="[
             'rounded-full w-fit h-6 text-[11px] font-bold px-3 flex items-center justify-center border-none',
             tagColor(task.tags)
@@ -86,12 +88,14 @@ const handleDragEnd = () => {
           </v-card-title>
         </div>
 
-        <!-- BODY (KHÔNG DRAG) -->
-        <v-card-text class="select-text">
-          {{ task.description }}
-        </v-card-text>
+        <div class="drag-handle">
+          <v-card-text>
+            {{ task.description }}
+          </v-card-text>
+        </div>
 
-        <div class="flex justify-between items-center px-4 pb-4">
+
+        <div class="flex justify-between items-center px-4 pb-4 drag-handle">
           <div class="flex flex-row-reverse justify-end italic">
             <v-avatar size="32" class="ml-n3">
               <img :src="avatar1" alt="" />
@@ -115,6 +119,7 @@ const handleDragEnd = () => {
           </div>
         </div>
       </v-card>
+      <div class="drop-zone"></div>
     </draggable>
   </div>
 </template>
@@ -131,14 +136,23 @@ const handleDragEnd = () => {
 .kanban-card {
   backface-visibility: hidden;
   transform: translateZ(0);
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  touch-action: none;
+}
+
+.kanban-card * {
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
 }
 
 .drag-handle {
   user-select: none;
-}
-
-.select-text {
-  user-select: text;
+  -webkit-user-select: none;
+  -moz-user-select: none;
 }
 
 .drag-chosen {
@@ -158,12 +172,26 @@ const handleDragEnd = () => {
     0 12px 24px rgba(0, 0, 0, 0.18),
     0 4px 8px rgba(0, 0, 0, 0.1);
   border-radius: 16px;
-  cursor: grabbing;
   z-index: 9999 !important;
   pointer-events: none;
+  will-change: transform;
+  backface-visibility: hidden;
+  -webkit-font-smoothing: antialiased;
 }
 
 .dragging * {
   user-select: none !important;
+  -webkit-user-select: none !important;
+  -moz-user-select: none !important;
 }
+
+.drop-zone {
+  height: 100px;
+  border: 2px dashed #cbd5e1;
+  border-radius: 12px;
+  opacity: 0;
+  transition: all 0.2s ease-out;
+  background: transparent;
+}
+
 </style>

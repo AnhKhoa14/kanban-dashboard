@@ -56,7 +56,7 @@ import { Plus } from 'lucide-vue-next';
 import CardInProgress from './CardInProgress.vue';
 import CardReviewed from './CardReviewed.vue';
 import CardCompleted from './CardCompleted.vue';
-import Dialog from './Dialog.vue';
+import Dialog from './homePage/Dialog.vue';
 
 const isDialogOpen = ref(false);
 const currentStatus = ref('');

@@ -11,8 +11,6 @@ type Task = {
   status: string
 }
 
-const STORAGE_KEY = 'kanban_tasks'
-
 const isDialogOpen = ref(false)
 const currentStatus = ref('')
 const tasks = ref<Task[]>([])
@@ -20,7 +18,7 @@ const tasks = ref<Task[]>([])
 onMounted(() => {
   if (typeof window === 'undefined') return
   try {
-    const saved = localStorage.getItem(STORAGE_KEY)
+    const saved = localStorage.getItem('kanban_tasks')
     if (saved) {
       const parsed = JSON.parse(saved)
       if (Array.isArray(parsed)) {
@@ -35,7 +33,7 @@ onMounted(() => {
 watch(tasks, (val) => {
   if (typeof window === 'undefined') return
   try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(val))
+    localStorage.setItem('kanban_tasks', JSON.stringify(val))
   } catch (error) {
     console.error('Failed to save tasks to storage', error)
   }
@@ -68,21 +66,33 @@ const syncColumns = () => {
 
 watch(tasks, syncColumns, { deep: true, immediate: true })
 
-const onColumnDrop = ( taskId: string , toStatus: string ) => {
-  const task = tasks.value.find(t => t.id === taskId)
-  if (task) {
-    task.status = toStatus
-  }
+const onColumnDrop = (payload: { taskId: string; toStatus: string }) => {
+  const task = tasks.value.find(t => t.id === payload.taskId)
+  if (!task) return
+
+  task.status = payload.toStatus
+  tasks.value = [...tasks.value]
+  console.log('Updated task status:', task)
 }
 
 const onChangeStatus = (payload: { taskId: string; newStatus: string }) => {
   const task = tasks.value.find(t => t.id === payload.taskId);
-  if (task) task.status = payload.newStatus;
+  if (task) {
+    task.status = payload.newStatus;
+    tasks.value = [...tasks.value]
+    try {
+      localStorage.setItem('kanban_tasks', JSON.stringify(tasks.value))
+    } catch (error) {
+      console.error('Failed to save to localStorage', error)
+    }
+  }
 }
+
+
 </script>
 
 <template>
-  <div class="flex gap-6 px-8 pb-8 justify-around">
+  <div class="grid grid-cols-3 gap-6 px-8 pb-8 min-h-screen overflow-x-auto">
 
     <CardColumn title="In Progress" color="#4F46E5" status="In Progress" :tasks="inProgressTasks"
       @add="handleClick('In Progress')" @change-status="onChangeStatus" @column-drop="onColumnDrop" />

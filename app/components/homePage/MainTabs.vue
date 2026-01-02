@@ -1,5 +1,5 @@
 <template>
-  <div class="pt-16">
+  <div class="pt-1">
     <!-- <client-only> -->
       <v-sheet elevation="0">
         <v-tabs color="#4F46E5" class="pl-4 pr-8">

@@ -4,17 +4,21 @@ import vuetify from "vite-plugin-vuetify";
 
 export default defineNuxtConfig({
   compatibilityDate: "2025-07-15",
-  // ssr: false,
+  ssr: false,
   devtools: { enabled: true },
+
   css: [
     './assets/css/main.css',
     '@mdi/font/css/materialdesignicons.css',
     'vuetify/styles',
   ],
+
   vite: {
     plugins: [tailwindcss(), vuetify({ autoImport: true })],
   },
   build: {
     transpile: ["vuetify"],
   },
+
+  modules: ["nuxt-auth-utils"],
 });
