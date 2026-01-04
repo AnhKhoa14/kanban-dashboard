@@ -65,6 +65,7 @@ definePageMeta({
 import { ref } from 'vue';
 import bgAuth from '../../../assets/image/bg-auth.png';
 import { loginWithEmailPassword, loginWithGoogle } from '~/services/auth.service';
+import { saveUserToFirestore } from '~/services/user.service';
 
 const email = ref('');
 const password = ref('');
@@ -92,7 +93,12 @@ const loginGoogle = async () => {
   try {
     loading.value = true;
     const user = await loginWithGoogle();
-    console.log('Logged in user:', user);
+    await saveUserToFirestore({
+      uid: user.uid,
+      email: user.email,
+      displayName: user.displayName,
+      photoURL: user.photoURL || null,
+    })
     navigateTo('/dashboard');
   } catch (error: any) {
     error.value = error.message || 'An error occurred during Google login.';

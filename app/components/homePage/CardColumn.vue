@@ -10,7 +10,7 @@ const props = defineProps<{
   tasks: any[]
 }>()
 
-const emit = defineEmits(['add', 'change-status', 'column-drop'])
+const emit = defineEmits(['add', 'column-drop'])
 
 const tagColor = (tag: string) => {
   switch (tag) {

@@ -5,12 +5,13 @@ import {
   signInWithPopup,
   updateProfile,
 } from "firebase/auth";
-import { auth } from "./../configs/firebase";
+import { useFirebase } from "./../configs/firebase";
 
 export const loginWithEmailPassword = async (
   email: string,
   password: string
 ) => {
+  const { auth } = useFirebase();
   const userCredential = await signInWithEmailAndPassword(
     auth,
     email,
@@ -24,6 +25,7 @@ export const registerWithEmailPassword = async (
   email: string,
   password: string
 ) => {
+  const { auth } = useFirebase();
   const userCredential = await createUserWithEmailAndPassword(
     auth,
     email,
@@ -34,6 +36,7 @@ export const registerWithEmailPassword = async (
 };
 
 export const loginWithGoogle = async () => {
+  const { auth } = useFirebase();
   const provider = new GoogleAuthProvider();
   provider.setCustomParameters({
     prompt: 'select_account',

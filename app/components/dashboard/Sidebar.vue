@@ -46,7 +46,11 @@
 </template>
 
 <script lang="ts" setup>
-import { auth } from '~/configs/firebase';
+import { useAuth } from '~/composable/useAuth';
+import { useFirebase } from '~/configs/firebase';
+
+
+const { user, ready } = useAuth()
 
 const handleLogout = async () => {
   const { clear } = useUserSession()
@@ -56,7 +60,6 @@ const handleLogout = async () => {
   await router.push('/auth/sign-in')
   console.log('Logged out')
 }
-const user = auth.currentUser;
 </script>
 
 <style></style>

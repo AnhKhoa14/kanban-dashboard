@@ -43,6 +43,7 @@
 
 <script lang="ts" setup>
 import { ref, watch } from 'vue';
+import { createTask } from '~/services/task.service';
 
 const modelValue = defineModel<boolean>();
 const props = defineProps<{
@@ -86,26 +87,22 @@ const handleSave = async () => {
 
   if (!isValid) return
 
-  emit('taskSaved', {
+  const savedTask = await createTask({
     name: taskName.value,
     tags: taskTags.value,
     description: taskDescription.value,
     status: selectedStatus.value
-  })
-  localStorage.setItem('kanban_tasks', JSON.stringify({
-    name: taskName.value,
-    tags: taskTags.value,
-    description: taskDescription.value,
-    status: selectedStatus.value
-  }))
+  });
+
+  emit('taskSaved', savedTask);
+
+  showNotification.value = true
+  modelValue.value = false
+
   taskName.value = ''
   taskTags.value = ''
   taskDescription.value = ''
   selectedStatus.value = props.status
-  clearErrors()
-
-  showNotification.value = true
-  modelValue.value = false
 }
 
 </script>

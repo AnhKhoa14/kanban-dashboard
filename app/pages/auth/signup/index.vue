@@ -72,6 +72,7 @@ definePageMeta({
 import { ref } from 'vue';
 import bgAuth from '../../../assets/image/bg-auth.png';
 import { registerWithEmailPassword } from '~/services/auth.service';
+import { saveUserToFirestore } from '~/services/user.service';
 
 const name = ref('');
 const email = ref('');
@@ -89,8 +90,15 @@ const signUp = async () => {
         loading.value = true;
         error.value = '';
         success.value = false;
-        await registerWithEmailPassword(name.value, email.value, password.value);
+        const user = await registerWithEmailPassword(name.value, email.value, password.value);
         success.value = true;
+
+        await saveUserToFirestore({
+            uid: user.uid,
+            email: email.value,
+            displayName: name.value,
+            photoURL: null,
+        })
         setTimeout(() => {
             navigateTo('/auth/sign-in');
         }, 1500);

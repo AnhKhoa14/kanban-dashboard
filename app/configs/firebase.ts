@@ -1,17 +1,23 @@
-import { initializeApp, getApps } from "firebase/app";
-import { getAuth } from "firebase/auth";
+import { initializeApp, getApps, getApp } from 'firebase/app'
+import { getAuth } from 'firebase/auth'
+import { getFirestore } from 'firebase/firestore'
 
-const firebaseConfig = {
-  apiKey: process.env.FIREBASE_API_KEY,
-  authDomain: process.env.FIREBASE_AUTH_DOMAIN,
-  projectId: process.env.FIREBASE_PROJECT_ID,
-  storageBucket: process.env.FIREBASE_STORAGE_BUCKET,
-  messagingSenderId: process.env.FIREBASE_MESSAGING_SENDER_ID,
-  appId: process.env.FIREBASE_APP_ID,
-};
+export const useFirebase = () => {
+  const config = useRuntimeConfig()
 
-const app = getApps().length
-  ? getApps()[0]
-  : initializeApp(firebaseConfig)
+  const firebaseConfig = {
+    apiKey: config.public.firebase.apiKey,
+    authDomain: config.public.firebase.authDomain,
+    projectId: config.public.firebase.projectId,
+    storageBucket: config.public.firebase.storageBucket,
+    messagingSenderId: config.public.firebase.messagingSenderId,
+    appId: config.public.firebase.appId,
+  }
 
-export const auth = getAuth(app)
+  const app = getApps().length ? getApp() : initializeApp(firebaseConfig)
+
+  const auth = getAuth(app)
+  const db = getFirestore(app)
+
+  return { app, auth, db }
+}
