@@ -21,6 +21,11 @@ export default {
       name: 'dashboard',
       path: '/dashboard',
       component: () => import('~/pages/dashboard/index.vue'),
+    },
+    {
+      name: 'chat',
+      path: '/chat',
+      component: () => import('~/pages/chat/index.vue'),
     }
     
   ],

@@ -16,7 +16,10 @@
 <script lang="ts" setup>
 import Navbar from '~/components/dashboard/Navbar.vue';
 import Sidebar from '~/components/dashboard/Sidebar.vue';
-
+import { useFcm } from '~/composable/useFcm.client';
+onMounted(async () => {
+  await useFcm()
+})
 
 </script>
 
@@ -30,10 +33,14 @@ import Sidebar from '~/components/dashboard/Sidebar.vue';
   display: flex;
   flex-direction: column;
   height: 100%;
+  min-height: 0;
 }
 
 .dashboard-content {
   flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
   overflow-y: auto;
   padding: 16px;
 }

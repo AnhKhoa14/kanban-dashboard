@@ -11,15 +11,35 @@
     </div>
 
     <v-list density="compact" nav>
-      <div class="flex justify-between">
-        <v-list-item prepend-icon="mdi-home-outline" title="Home" value="home"></v-list-item>
-        <span class="flex justify-center items-center border border-[#A5B4FC] gap-1.5 px-3 rounded-full w-fit">10</span>
-      </div>
+      <v-list-item prepend-icon="mdi-home-outline" title="Home" value="home" @click="() => router.push('dashboard')">
+        <template #append>
+          <span
+            class="flex justify-center items-center border-[0.5px] border-indigo-300 text-[10px] text-indigo-600 h-5 px-2 rounded-full font-medium">
+            10
+          </span>
+        </template>
+      </v-list-item>
+
       <v-list-item prepend-icon="mdi-format-list-bulleted" title="Tasks" value="tasks"></v-list-item>
-      <div class="flex justify-between">
-        <v-list-item prepend-icon="mdi-account" title="Users" value="users"></v-list-item>
-        <span class="flex justify-center items-center border border-[#A5B4FC] gap-1.5 px-3 rounded-full w-fit">2</span>
-      </div>
+
+      <v-list-item prepend-icon="mdi-account" title="Users" value="users">
+        <template #append>
+          <span
+            class="flex justify-center items-center border-[0.5px] border-indigo-300 text-[10px] text-indigo-600 h-5 px-2 rounded-full font-medium">
+            2
+          </span>
+        </template>
+      </v-list-item>
+
+      <v-list-item prepend-icon="mdi-message" title="Messages" value="messages" @click="() => router.push('/chat')">
+        <template #append>
+          <span
+            class="flex justify-center items-center border-[0.5px] border-indigo-300 text-[10px] text-indigo-600 h-5 px-2 rounded-full font-medium">
+            5
+          </span>
+        </template>
+      </v-list-item>
+
       <v-list-item prepend-icon="mdi-api" title="API" value="api"></v-list-item>
       <v-list-item prepend-icon="mdi-card-bulleted-outline" title="Subscription" value="subscription"></v-list-item>
       <v-list-item prepend-icon="mdi-cog-outline" title="Settings" value="settings"></v-list-item>
@@ -47,19 +67,19 @@
 
 <script lang="ts" setup>
 import { useAuth } from '~/composable/useAuth';
-import { useFirebase } from '~/configs/firebase';
 
 
-const { user, ready } = useAuth()
+const { user, ready } = await useAuth()
+const router = useRouter()
 
 const handleLogout = async () => {
   const { clear } = useUserSession()
   await clear()
 
-  const router = useRouter()
   await router.push('/auth/sign-in')
   console.log('Logged out')
 }
+
 </script>
 
 <style></style>

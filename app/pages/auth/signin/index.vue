@@ -11,7 +11,7 @@
             Enter your credentials to access your account
           </p>
 
-          <v-form>
+          <v-form @keyup.enter="goToDashboard">
             <v-text-field v-model="email" label="Email address" placeholder="Enter your email" variant="outlined"
               density="comfortable" class="mb-4" tabindex="1" />
 
@@ -66,11 +66,18 @@ import { ref } from 'vue';
 import bgAuth from '../../../assets/image/bg-auth.png';
 import { loginWithEmailPassword, loginWithGoogle } from '~/services/auth.service';
 import { saveUserToFirestore } from '~/services/user.service';
+import { useFcm } from '~/composable/useFcm.client';
 
 const email = ref('');
 const password = ref('');
 const loading = ref(false);
 const error = ref('');
+
+onMounted(async () => {
+  const token = await useFcm();
+  console.log("FCM TOKEN:", token);
+});
+
 
 const goToSignUp = () => {
   navigateTo('/auth/sign-up');

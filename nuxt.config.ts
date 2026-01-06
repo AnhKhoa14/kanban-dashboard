@@ -17,6 +17,7 @@ export default defineNuxtConfig({
         messagingSenderId: process.env.NUXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
         appId: process.env.NUXT_PUBLIC_FIREBASE_APP_ID,
       },
+      firebaseVapidKey: process.env.NUXT_PUBLIC_FIREBASE_VAPID_KEY,
     },
   },
 
@@ -33,5 +34,5 @@ export default defineNuxtConfig({
     transpile: ["vuetify"],
   },
 
-  modules: ["nuxt-auth-utils"],
+  modules: ["nuxt-auth-utils", "@pinia/nuxt"],
 });

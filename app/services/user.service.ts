@@ -1,5 +1,5 @@
 import { doc, getDoc, setDoc, serverTimestamp } from "firebase/firestore";
-import { useFirebase } from "~/configs/firebase";
+import { useFirebase } from "~/composable/useFirebase.client";
 
 export const saveUserToFirestore = async (user: {
   uid: string;
@@ -7,7 +7,7 @@ export const saveUserToFirestore = async (user: {
   displayName: string | null;
   photoURL?: string | null;
 }) => {
-  const { db } = useFirebase();
+  const { db } = await useFirebase();
   const userRef = doc(db, "users", user.uid);
   const snap = await getDoc(userRef);
 

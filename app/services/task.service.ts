@@ -5,7 +5,7 @@ import {
   collection,
   getDocs,
 } from "firebase/firestore";
-import { useFirebase } from "~/configs/firebase";
+import { useFirebase } from "~/composable/useFirebase.client";
 
 export type Task = {
   id?: string;
@@ -16,7 +16,7 @@ export type Task = {
 };
 
 export const createTask = async (task: Task): Promise<Task> => {
-  const { auth, db } = useFirebase();
+  const { auth, db } = await useFirebase();
 
   const user = auth.currentUser;
   if (!user) throw new Error("Not authenticated");
@@ -40,7 +40,7 @@ export const createTask = async (task: Task): Promise<Task> => {
 };
 
 export const getMyTasks = async (): Promise<Task[]> => {
-  const { auth, db } = useFirebase();
+  const { auth, db } = await useFirebase();
 
   const user = auth.currentUser;
   if (!user) return [];

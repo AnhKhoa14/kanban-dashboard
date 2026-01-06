@@ -2,16 +2,16 @@
 import { ref, computed, onMounted, watch } from 'vue'
 import Dialog from './Dialog.vue'
 import CardColumn from './CardColumn.vue'
-import { useFirebase } from '~/configs/firebase'
 import { doc, updateDoc } from 'firebase/firestore'
 import { getMyTasks } from '~/services/task.service'
 import type { Task } from '~/services/task.service'
 import { useAuth } from '~/composable/useAuth'
+import { useFirebase } from '~/composable/useFirebase.client'
 
 const isDialogOpen = ref(false)
 const currentStatus = ref('')
 const tasks = ref<Task[]>([])
-const { user, ready } = useAuth()
+const { user, ready } =  await useAuth()
 
 watch(ready, async (isReady) => {
   if (!isReady || !user.value) return
@@ -44,7 +44,7 @@ const completedTasks = computed(() =>
 )
 
 const onColumnDrop = async (payload: { taskId: string; toStatus: string }) => {
-  const { auth, db } = useFirebase();
+  const { auth, db } = await useFirebase();
   const user = auth.currentUser;
   if(!user) return;
 
@@ -59,20 +59,6 @@ const onColumnDrop = async (payload: { taskId: string; toStatus: string }) => {
   tasks.value = [...tasks.value]
   console.log('Updated task status:', task)
 }
-
-// const onChangeStatus = (payload: { taskId: string; newStatus: string }) => {
-//   const task = tasks.value.find(t => t.id === payload.taskId);
-//   if (task) {
-//     task.status = payload.newStatus;
-//     tasks.value = [...tasks.value]
-//     try {
-//       localStorage.setItem('kanban_tasks', JSON.stringify(tasks.value))
-//     } catch (error) {
-//       console.error('Failed to save to localStorage', error)
-//     }
-//   }
-// }
-
 
 </script>
 

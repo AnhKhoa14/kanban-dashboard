@@ -2,7 +2,6 @@
     <v-container fluid class="pa-0 h-100">
         <v-row no-gutters class="h-100">
 
-            <!-- LEFT: FORM -->
             <v-col cols="12" md="6" class="d-flex align-center justify-center">
                 <div class="register-form">
                     <h1 class="text-h5 font-weight-bold mb-2">
@@ -57,7 +56,6 @@
                 </div>
             </v-col>
 
-            <!-- RIGHT: IMAGE -->
             <v-col cols="12" md="6" class="d-none d-md-flex h-screen">
                 <v-img width="100%" :src="bgAuth" cover class="auth-image"></v-img>
             </v-col>
@@ -101,7 +99,7 @@ const signUp = async () => {
         })
         setTimeout(() => {
             navigateTo('/auth/sign-in');
-        }, 1500);
+        }, 1000);
     } catch (err: any) {
         error.value = err.message || 'An error occurred during sign up.';
     } finally {

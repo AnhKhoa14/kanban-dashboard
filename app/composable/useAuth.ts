@@ -1,13 +1,14 @@
 import { ref, readonly } from 'vue'
 import { onAuthStateChanged } from 'firebase/auth'
-import { useFirebase } from '~/configs/firebase'
+import { useFirebase } from './useFirebase.client'
+
 
 const _user = ref<any>(null)
 const _ready = ref(false)
 let _initialized = false
 
-export const useAuth = () => {
-  const { auth } = useFirebase()
+export const useAuth = async () => {
+  const { auth } = await useFirebase()
 
   if (!_initialized) {
     _initialized = true
