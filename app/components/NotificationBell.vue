@@ -3,7 +3,6 @@
     <template #activator="{ props }">
       <div v-bind="props" class="relative inline-flex items-center justify-center cursor-pointer">
         <Bell class="w-6 text-gray-600" />
-
         <span v-if="store.unreadCount > 0" class="absolute -top-2 -right-1 min-w-4.5 h-4.5
                   bg-red-500 text-white text-[10px] font-bold
                   rounded-full flex items-center justify-center px-1 border-2 border-white">
@@ -20,6 +19,7 @@
       <div class="max-h-80 overflow-y-auto">
         <div v-for="item in store.notifications" :key="item.id"
           class="relative px-4 py-3 flex items-center gap-3 transition-colors cursor-pointer group border-b"
+          @click="handleNotificationClick(item)"
           :class="[!item.read ? 'bg-blue-50 hover:bg-blue-100' : 'bg-white hover:bg-gray-50']">
           <div v-if="!item.read" class="mt-1.5">
             <div class="w-2 h-2 bg-blue-600 rounded-full"></div>
@@ -28,7 +28,6 @@
           <div v-else class="w-1 h-1 mt-1.5"></div>
 
           <div class="flex-1 pr-6">
-            
             <div class="font-semibold text-sm" :class="[!item.read ? 'text-gray-900' : 'text-gray-600']">
               {{ item.title }}
             </div>
@@ -49,7 +48,7 @@
       </div>
 
       <div class="border-t px-4 py-2 bg-gray-50 text-center">
-        <button class="text-sm font-medium text-indigo-600 hover:text-indigo-800" @click="store.markAllAsRead()">
+        <button class="text-sm font-medium text-indigo-600 hover:text-indigo-800" @click="handleMarkAllAsRead">
           Mark all as read
         </button>
       </div>
@@ -59,9 +58,26 @@
 
 
 <script lang="ts" setup>
-import { Bell, Dot, EllipsisVertical } from "lucide-vue-next";
+import { ref } from 'vue'
+import { Bell, EllipsisVertical } from "lucide-vue-next";
 import { useNotificationStore } from "~/store/notification";
+import { useAuth } from '~/composable/useAuth';
+
 const store = useNotificationStore();
 const open = ref(false);
+const { user } = await useAuth();
+
+const handleNotificationClick = async (notification: any) => {
+  if(!user.value) return;
+  await store.markAsRead(notification.id, user.value.uid);
+  store.notifications.find(n => n.id === notification.id)!.read = true;
+}
+
+const handleMarkAllAsRead = async () => {
+  if(!user.value) return;
+  await store.markAllAsRead(user.value.uid);
+
+  store.notifications.forEach(n => (n.read = true));
+}
 </script>
 <style></style>

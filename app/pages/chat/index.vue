@@ -6,12 +6,17 @@ definePageMeta({
 import { ref } from 'vue'
 import ChatRoom from '~/components/chat/ChatRoom.vue'
 import ChatRoomList from '~/components/chat/ChatRoomList.vue'
+import { useChatStore } from '~/store/chat'
 
 const selectedUserId = ref<string | null>(null)
+const chatStore = useChatStore();
 
 const handleSelectUser = (uid: string) => {
   selectedUserId.value = uid
+  chatStore.setActiveChat(uid);
 }
+
+
 </script>
 
 <template>

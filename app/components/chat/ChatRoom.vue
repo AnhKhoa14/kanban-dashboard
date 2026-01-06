@@ -71,7 +71,7 @@ watch(messages, async () => {
       </div>
     </div>
 
-    <div ref="messagesContainer" class="flex-1 overflow-y-auto p-4 space-y-2 bg-gray-50 flex flex-col">
+    <div ref="messagesContainer" class="flex-1 overflow-y-auto p-4 space-y-2 bg-gray-50 flex flex-col mb-2">
       <transition-group name="chat" tag="div">
         <ChatMessage v-for="msg in messages" :key="msg.id" :message="msg" :isMine="msg.senderId === user?.uid" />
       </transition-group>

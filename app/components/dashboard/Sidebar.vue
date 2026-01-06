@@ -33,9 +33,9 @@
 
       <v-list-item prepend-icon="mdi-message" title="Messages" value="messages" @click="() => router.push('/chat')">
         <template #append>
-          <span
+          <span v-if="notificationStore.unreadCount > 0"
             class="flex justify-center items-center border-[0.5px] border-indigo-300 text-[10px] text-indigo-600 h-5 px-2 rounded-full font-medium">
-            5
+            {{ notificationStore.unreadCount }}
           </span>
         </template>
       </v-list-item>
@@ -67,10 +67,11 @@
 
 <script lang="ts" setup>
 import { useAuth } from '~/composable/useAuth';
-
+import { useNotificationStore } from '~/store/notification';
 
 const { user, ready } = await useAuth()
 const router = useRouter()
+const notificationStore = useNotificationStore();
 
 const handleLogout = async () => {
   const { clear } = useUserSession()
