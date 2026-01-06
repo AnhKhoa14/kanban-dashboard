@@ -9,7 +9,7 @@
         class="group flex items-center gap-4 px-4 py-3 cursor-pointer transition-all duration-200 hover:bg-blue-50 relative"
         :class="{ 'bg-blue-50/50': selectedUserId === user.uid }">
         <div class="relative">
-          <v-avatar :image="user?.photoURL || 'https://via.placeholder.com/150'" size="48"
+          <v-avatar :image="user?.photoURL" size="48"
             class="elevation-2 border-2 border-white" />
           <span class="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-white rounded-full"></span>
         </div>
